@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=library
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user123
+    volumes:
+      - "./library.sql:/docker-entrypoint-initdb.d/library.sql"
+  app:
+    depends_on:
+      - mysql
+    build: .
+    ports:
+      - '8080:8080'
+    environment:
+      - MYSQL_ADDRESS=mysql:3306
+      - MYSQL_DATABASE=library
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user123
